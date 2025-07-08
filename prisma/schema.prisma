@@ -1,0 +1,195 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+/* ---------------------------
+   contratos
+--------------------------- */
+model Contract {
+  id                String   @id @default(uuid())
+  code              String   @unique
+  transactionType   String
+  contractDate      DateTime
+  product           String
+  cropYear          String
+  city              String
+  volume            Float
+  sacks             Float?
+  currency          String
+  brlValue          Float?
+  usdValue          Float?
+  ptaxRate          Float?
+  ptaxDate          DateTime?
+  convertedValue    Float?
+  totalValue        Float?
+  branchOrigin      String
+  branchThirdParty  String?
+  warehouse         String?
+  deliveryDate      DateTime
+  notes             String?
+  status            StatusContrato @default(PENDENTE)
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+
+  /* explicitas m-to-m */
+  partners          ContractPartner[]
+  properties        ContractProperty[]
+  payees            ContractPayee[]
+}
+
+/* ---------------------------
+   parceiros
+--------------------------- */
+model Partner {
+  id          String      @id @default(uuid())
+  document    String?     @unique   // cpf ou cnpj
+  name        String
+  personType  TipoPessoa
+  zipCode     String
+  street      String
+  number      String
+  district    String
+  city        String
+  state       String
+
+  contracts   ContractPartner[]
+  properties  PartnerProperty[]
+}
+
+/* ---------------------------
+   propriedades
+--------------------------- */
+model Property {
+  id          String            @id @default(uuid())
+  registry    String            @unique
+  name        String
+
+  contracts   ContractProperty[]
+  owners      PartnerProperty[]
+}
+
+/* ---------------------------
+   recebedores
+--------------------------- */
+model Payee {
+  id           String        @id @default(uuid())
+  receiverType TipoRecebedor
+  name         String?
+  personType   TipoPessoa?
+  cpf          String?       @unique
+  cnpj         String?       @unique
+  bank         String
+  agency       String
+  account      String
+
+  contracts    ContractPayee[]
+}
+
+/* =======================================================
+   JOIN TABLES COM METADADOS
+======================================================= */
+
+/* contrato ↔ parceiro */
+model ContractPartner {
+  id            String            @id @default(uuid())
+  contractId    String
+  partnerId     String
+
+  role          PartnerRole       // comprador, vendedor, corretor...
+  sharePercent  Float?            // 0-100
+
+  contract      Contract  @relation(fields: [contractId], references: [id])
+  partner       Partner   @relation(fields: [partnerId],  references: [id])
+
+  @@unique([contractId, partnerId])   // um parceiro não se repete dentro do mesmo contrato
+}
+
+/* contrato ↔ propriedade */
+model ContractProperty {
+  id            String               @id @default(uuid())
+  contractId    String
+  propertyId    String
+
+  usageType     PropertyUsage        // garantia, penhor, arrendamento…
+  sharePercent  Float?
+
+  contract      Contract  @relation(fields: [contractId], references: [id])
+  property      Property  @relation(fields: [propertyId], references: [id])
+
+  @@unique([contractId, propertyId])
+}
+
+/* contrato ↔ recebedor */
+model ContractPayee {
+  id            String            @id @default(uuid())
+  contractId    String
+  payeeId       String
+
+  amount        Float
+  currency      String             // pq cada contrato pode pagar em moeda diferente
+  note          String?
+
+  contract      Contract  @relation(fields: [contractId], references: [id])
+  payee         Payee     @relation(fields: [payeeId],    references: [id])
+
+  @@unique([contractId, payeeId])
+}
+
+/* parceiro ↔ propriedade */
+model PartnerProperty {
+  id            String          @id @default(uuid())
+  partnerId     String
+  propertyId    String
+
+  ownershipType OwnershipType   // DONO, ARRENDATARIO…
+  sharePercent  Float?
+
+  partner       Partner   @relation(fields: [partnerId],  references: [id])
+  property      Property  @relation(fields: [propertyId], references: [id])
+
+  @@unique([partnerId, propertyId])
+}
+
+/* =======================================================
+   enums
+======================================================= */
+
+enum StatusContrato {
+  PENDENTE
+  LIBERADO
+  CANCELADO
+}
+
+enum TipoPessoa {
+  FISICA
+  JURIDICA
+}
+
+enum TipoRecebedor {
+  CLIENTE
+  TERCEIRO
+}
+
+/* papéis extras pra join tables */
+enum PartnerRole {
+  COMPRADOR
+  VENDEDOR
+  FINANCIADOR
+}
+
+enum PropertyUsage {
+  GARANTIA
+  ARRENDADA
+  PRÓPRIA
+}
+
+enum OwnershipType {
+  DONO
+  ARRENDATARIO
+}
