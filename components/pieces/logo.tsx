@@ -9,7 +9,7 @@ export function Zatjini({ className }: LogoProps ){
   return (
     <Link 
       href="/"
-      className={`font-averia text-3xl -translate-y-[1px] select-none ${className}`}
+      className={`font-averia text-4xl -translate-y-[3px] select-none ${className}`}
     >
       zatjini
     </Link>
