@@ -8,9 +8,48 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-/* ---------------------------
-   contratos
---------------------------- */
+/* =======================================================
+                          ENUMS
+======================================================= */
+
+enum StatusContrato {
+  PENDENTE
+  LIBERADO
+  CANCELADO
+}
+
+enum TipoPessoa {
+  FISICA
+  JURIDICA
+}
+
+enum TipoRecebedor {
+  CLIENTE
+  TERCEIRO
+}
+
+/* papéis extras pra join tables */
+enum PartnerRole {
+  COMPRADOR
+  VENDEDOR
+  FINANCIADOR
+}
+
+enum PropertyUsage {
+  GARANTIA
+  ARRENDADA
+  PRÓPRIA
+}
+
+enum OwnershipType {
+  DONO
+  ARRENDATARIO
+}
+
+/* =======================================================
+                  TABELAS DE CONTRATO
+======================================================= */
+
 model Contract {
   id                String   @id @default(uuid())
   code              String   @unique
@@ -43,9 +82,6 @@ model Contract {
   payees            ContractPayee[]
 }
 
-/* ---------------------------
-   parceiros
---------------------------- */
 model Partner {
   id          String      @id @default(uuid())
   document    String?     @unique   // cpf ou cnpj
@@ -62,9 +98,6 @@ model Partner {
   properties  PartnerProperty[]
 }
 
-/* ---------------------------
-   propriedades
---------------------------- */
 model Property {
   id          String            @id @default(uuid())
   registry    String            @unique
@@ -74,9 +107,6 @@ model Property {
   owners      PartnerProperty[]
 }
 
-/* ---------------------------
-   recebedores
---------------------------- */
 model Payee {
   id           String        @id @default(uuid())
   receiverType TipoRecebedor
@@ -92,7 +122,7 @@ model Payee {
 }
 
 /* =======================================================
-   JOIN TABLES COM METADADOS
+                  TABELAS DE RELAÇÕES
 ======================================================= */
 
 /* contrato ↔ parceiro */
@@ -157,39 +187,65 @@ model PartnerProperty {
 }
 
 /* =======================================================
-   enums
+                TABELAS DE AUTENTICAÇÃO
 ======================================================= */
 
-enum StatusContrato {
-  PENDENTE
-  LIBERADO
-  CANCELADO
+model User {
+  id            String    @id
+  name          String
+  email         String
+  emailVerified Boolean
+  image         String?
+  createdAt     DateTime
+  updatedAt     DateTime
+  sessions      Session[]
+  accounts      Account[]
+
+  @@unique([email])
+  @@map("user")
 }
 
-enum TipoPessoa {
-  FISICA
-  JURIDICA
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@map("session")
 }
 
-enum TipoRecebedor {
-  CLIENTE
-  TERCEIRO
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+
+  @@map("account")
 }
 
-/* papéis extras pra join tables */
-enum PartnerRole {
-  COMPRADOR
-  VENDEDOR
-  FINANCIADOR
-}
+model Verification {
+  id         String    @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
 
-enum PropertyUsage {
-  GARANTIA
-  ARRENDADA
-  PRÓPRIA
-}
-
-enum OwnershipType {
-  DONO
-  ARRENDATARIO
+  @@map("verification")
 }
