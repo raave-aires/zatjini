@@ -44,8 +44,8 @@ export const metadata: Metadata = {
       },
       {
         media: "(prefers-color-scheme: dark)",
-        url: "/favicons/white.svg",
-        href: "/favicons/white.svg",
+        url: "/favicon/white.svg",
+        href: "/favicon/white.svg",
       },
     ],
   },
