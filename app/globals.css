@@ -46,6 +46,7 @@
 }
 
 :root {
+  --container-h: calc(100dvh - 4.5rem);
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -120,5 +121,27 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  .container-h {
+    height: var(--container-h);
+    min-height: var(--container-h);
+    margin-top: 1rem;
+  }
+
+  /* se um dia precisar de max-height, já deixa engatilhado */
+  .max-container-h {
+    max-height: var(--container-h);
   }
 }
