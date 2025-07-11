@@ -1,5 +1,4 @@
 import { betterAuth } from "better-auth";
-import { emailOTP } from "better-auth/plugins";
 
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { PrismaClient } from "@prisma/client";

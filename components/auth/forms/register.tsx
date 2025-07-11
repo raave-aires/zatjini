@@ -81,16 +81,16 @@ export function RegisterForm() {
         callbackURL: "",
       },
       {
-        onRequest: (_ctx) => {
+        onRequest: () => {
           setIsPending(true);
         },
-        onSuccess: (_ctx) => {
+        onSuccess: () => {
           setIsPending(false);
           setShowCheck(true);
           setTimeout(() => setShowCheck(false), 2000);
           console.log(data)
         },
-        onError: (_ctx) => {
+        onError: () => {
           setIsPending(false);
           setShowErrorFlash(true);
           setTimeout(() => setShowErrorFlash(false), 2000);
