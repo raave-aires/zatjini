@@ -13,13 +13,13 @@ import {
 interface OtpEmailProps {
   name: string;
   code: string;
-  year: string;
 }
+
+const year: string = new Date().getFullYear().toString();
 
 export function OtpEmail({
   name,
   code,
-  year,
 }: OtpEmailProps) {
   return (
     <Html className="min-h-dvh flex justify-center items-center font-averia">
