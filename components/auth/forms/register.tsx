@@ -12,7 +12,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 // componentes:
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -50,8 +49,6 @@ const registerInfos = z.object({
 });
 
 export function RegisterForm() {
-  const router = useRouter();
-
   const [isPending, setIsPending] = useState(false);
   const [showCheck, setShowCheck] = useState(false);
   const [showErrorFlash, setShowErrorFlash] = useState(false);
