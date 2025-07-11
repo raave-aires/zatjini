@@ -31,39 +31,52 @@ export function VerificationEmail({
       <Preview>Verifique seu e-mail no Zatjini</Preview>
 
       <Tailwind>
-        <Body className="min-h-dvh min-w-dvw flex justify-center items-center">
+        <Body className="min-w-dvw flex justify-center items-center my-4">
           <Container className="bg-[#171717] text-white rounded-3xl mx-auto max-w-md max-h-[26.375rem]">
             <div className="px-8 py-6">
               <Heading className="text-2xl font-semibold">
                 <Img
                   alt="Logo do Zatjini"
                   width={100}
-                  src="https://raw.githubusercontent.com/raave-aires/zatjini/refs/heads/main/public/zatjini.png"
+                  src="https://zatjini.org/zatjini.png"
                 />
               </Heading>
-              <Text>
-                Oi, {name}, tudo certo? Antes de liberar seu acesso ao Zatjini,
-                precisamos confirmar que o e-mail <em>{email}</em> é realmente
-                seu. É rapidinho, só clicar aqui embaixo:
+              <Text className="hyphens-auto">
+                Oi, {name}! Antes de liberar seu acesso ao Zatjini, precisamos
+                confirmar que este e-mail ({email}) é realmente seu. É
+                rapidinho, só clicar aqui embaixo:
               </Text>
 
               <Button
                 href={verifyUrl}
-                className="border py-2 px-4 rounded-2xl !bg-[#e5e5e5] !text-[#171717] text-sm"
+                className="inline-block bg-[#e5e5e5] text-[#171717] rounded-2xl px-4 py-2 border-0"
               >
-                <span className="flex gap-2 items-center">
-                  Confirmar e-mail
-                  <Img
-                    alt="Ícone de flecha para cima e para esquerda"
-                    width={18}
-                    src="https://raw.githubusercontent.com/raave-aires/zatjini/refs/heads/main/public/icons/arrow-up-right.png"
-                  />
-                </span>
+                <table
+                  role="presentation"
+                  cellPadding="0"
+                  cellSpacing="0"
+                  className="border-collapse m-0"
+                >
+                  <tr>
+                    <td className="align-middle pr-1 pt-1 text-base leading-[18px] font-sans">
+                      Confirmar e-mail
+                    </td>
+                    <td className="align-middle pt-1">
+                      <img
+                        src="https://zatjini.org/icons/arrow-up-right.png"
+                        alt=""
+                        width="18"
+                        height="18"
+                        className="block border-0 leading-0"
+                      />
+                    </td>
+                  </tr>
+                </table>
               </Button>
 
               <Text>
-                Mas se você não pediu pra criar essa conta, pode ignorar esta
-                mensagem tranquilo(a).
+                Mas se você não pediu para criar essa conta, pode ignorar esta
+                mensagem tranquilamente.
               </Text>
 
               <Text>
@@ -76,7 +89,7 @@ export function VerificationEmail({
                 Atenciosamente, Zatjini.
               </Text>
               <Text className="text-xs text-[#a1a1a1]">
-                &#169; {year} Zatjini.
+                &#169; {year} Zatjini. Todos os direitos reservados.
               </Text>
             </div>
           </Container>
