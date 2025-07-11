@@ -17,14 +17,7 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Zatjini } from "@/components/pieces/logo";
 
 // ícones:
-import { EllipsisVertical, FilePlus2 } from "lucide-react";
-import {
-  SiGit,
-  SiBitbucket,
-  SiCodeberg,
-  SiGithub,
-  SiGitlab,
-} from "@icons-pack/react-simple-icons";
+import { EllipsisVertical } from "lucide-react";
 
 export function Header() {
   return (

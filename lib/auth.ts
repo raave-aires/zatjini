@@ -13,13 +13,6 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  plugins: [
-    emailOTP({
-      async sendVerificationOTP({ email, otp, type }) {
-        // Implement the sendVerificationOTP method to send the OTP to the user's email address
-      },
-    }),
-  ],
   socialProviders: {
     github: {
       clientId: process.env.GITHUB_CLIENT_ID as string,

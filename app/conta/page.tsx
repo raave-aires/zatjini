@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { Card } from "@/components/ui/card";
 import { LockKeyhole, MoveLeft, UserRound } from "lucide-react";
 
 export default function Page(){

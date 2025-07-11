@@ -1,12 +1,8 @@
 "use client";
 
 import React, {
-  useState,
-  useActionState,
-  startTransition,
-  useEffect,
+  useState
 } from "react";
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,11 +25,9 @@ import {
   Check,
   EyeIcon,
   EyeClosedIcon,
-  AlertCircleIcon,
   X,
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
-import { auth } from "@/lib/auth";
 
 // esquema do zod:
 const registerInfos = z.object({
@@ -87,18 +81,20 @@ export function RegisterForm() {
         callbackURL: "",
       },
       {
-        onRequest: (ctx) => {
+        onRequest: (_ctx) => {
           setIsPending(true);
         },
-        onSuccess: (ctx) => {
+        onSuccess: (_ctx) => {
           setIsPending(false);
           setShowCheck(true);
           setTimeout(() => setShowCheck(false), 2000);
+          console.log(data)
         },
-        onError: (ctx) => {
+        onError: (_ctx) => {
           setIsPending(false);
           setShowErrorFlash(true);
           setTimeout(() => setShowErrorFlash(false), 2000);
+          console.log(error)
         },
       }
     );
