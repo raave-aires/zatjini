@@ -10,7 +10,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { SendEmail } from "@/lib/actions/email";
+import { sendVerificationEmail } from "@/lib/actions/send-verification-email";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import z from "zod";
@@ -32,7 +32,7 @@ export default function Page() {
   });
 
   async function onSubmit(values: z.infer<typeof emailSchema>) {
-    await SendEmail(values);
+    await sendVerificationEmail(values);
   }
 
   return (
