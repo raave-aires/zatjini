@@ -196,7 +196,7 @@ export function RegisterForm() {
 
           <Button
             type="submit"
-            className={buttonColorClass as string}
+            className={`${buttonColorClass}`}
             disabled={isPending}
           >
             {isPending ? (
@@ -206,7 +206,7 @@ export function RegisterForm() {
             ) : showErrorFlash ? (
               <X size={18} />
             ) : (
-              "criar"
+              "Criar"
             )}
           </Button>
         </form>
