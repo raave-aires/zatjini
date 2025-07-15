@@ -12,21 +12,13 @@ interface SendVerificationEmailProps {
   verifyUrl: string;
 }
 
-interface SendVerificationEmailResult {
-  success: boolean;
-  message?: string;
-  data?: string;
-}
-
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function SendVerificationEmail(
-  _prevState: SendVerificationEmailResult | null,
-  {
-    name,
-    email,
-    verifyUrl,
-  }: SendVerificationEmailProps ): Promise<SendVerificationEmailResult> {
+export async function sendVerificationEmail({
+  name,
+  email,
+  verifyUrl,
+}: SendVerificationEmailProps ) {
   const { data, error } = await resend.emails.send({
     from: "Zatjini <confirm@zatjini.org>",
     to: [email],
