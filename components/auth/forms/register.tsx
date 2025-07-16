@@ -28,6 +28,8 @@ import {
   X,
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/errors";
 
 // esquema do zod:
 const registerInfos = z.object({
@@ -73,7 +75,7 @@ export function RegisterForm() {
     setShowErrorFlash(false);
     setIsPending(true);
 
-    const { data, error } = await authClient.signUp.email(
+    await authClient.signUp.email(
       {
         email: values.email,
         password: values.password,
@@ -84,17 +86,17 @@ export function RegisterForm() {
         onRequest: () => {
           setIsPending(true);
         },
-        onSuccess: () => {
+        onSuccess: (ctx) => {
           setIsPending(false);
           setShowCheck(true);
           setTimeout(() => setShowCheck(false), 2000);
-          console.log(data)
+          toast.success(<p>Enviamos um e-mail de confirmação para <br/>{ctx.data.user.email}</p>)
         },
-        onError: () => {
+        onError: (ctx) => {
           setIsPending(false);
           setShowErrorFlash(true);
           setTimeout(() => setShowErrorFlash(false), 2000);
-          console.log(error)
+          toast.error(getErrorMessage(ctx.error.code))
         },
       }
     );
