@@ -2,7 +2,7 @@
 
 // dependências:
 import { useState } from "react";
-import { redirect } from "next/navigation";
+import { useRouter } from 'next/navigation'
 
 // componentes:
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,8 @@ import { Loader } from "../pieces/loader";
 import { getErrorMessage } from "@/lib/errors";
 
 export function PasskeyButton() {
+  const router = useRouter()
+
   const [isPasskeyPending, setIsPasskeyPending] = useState(false);
   const [passkeyShowCheck, setPasskeyShowCheck] = useState(false);
   const [passkeyShowErrorFlash, setPasskeyShowErrorFlash] = useState(false);
@@ -33,7 +35,7 @@ export function PasskeyButton() {
           setPasskeyShowCheck(true);
           setTimeout(() => setPasskeyShowCheck(false), 2000);
           toast.success(`Bem-vindo(a), ${ctx.data.user.name}!`);
-          redirect("/");
+          router.push("/");
         },
         onError: (ctx) => {
           setIsPasskeyPending(false);

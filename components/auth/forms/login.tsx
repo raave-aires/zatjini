@@ -3,6 +3,7 @@
 // dependências:
 import React, { useState } from "react";
 import Link from "next/link";
+import { useRouter } from 'next/navigation'
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,7 +27,6 @@ import { Check, EyeIcon, EyeClosedIcon, X } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { PasskeyButton } from "../passkey-button";
 import { getErrorMessage } from "@/lib/errors";
-import { redirect } from "next/navigation";
 
 // esquema do zod:
 const loginInfos = z.object({
@@ -38,6 +38,8 @@ const loginInfos = z.object({
 });
 
 export function LoginForm() {
+  const router = useRouter()
+  
   const [isPending, setIsPending] = useState(false);
   const [showCheck, setShowCheck] = useState(false);
   const [showErrorFlash, setShowErrorFlash] = useState(false);
@@ -80,7 +82,7 @@ export function LoginForm() {
           setShowCheck(true);
           setTimeout(() => setShowCheck(false), 2000);
           toast.success(`Bem-vindo(a), ${ctx.data.user.name}!`)
-          redirect("/")
+          router.push("/");
         },
         onError: (ctx) => {
           setIsPending(false);
