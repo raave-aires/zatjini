@@ -9,6 +9,7 @@ import { ThemeProvider } from "@/components/ui/theme-provider";
 
 // fontes:
 import { Averia_Serif_Libre, Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 
 // instanciamento das fontes:
 const averia = Averia_Serif_Libre({
@@ -76,6 +77,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
