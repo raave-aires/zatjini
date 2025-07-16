@@ -12,7 +12,7 @@ export default function Page() {
     <>
       <AuthHeader auth_type="login" />
 
-      <CardContent className="flex flex-col gap-4">
+      <CardContent className="flex flex-col gap-2">
         <RenderOauthButtons />
         <Or />
         <LoginForm />
