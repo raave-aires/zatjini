@@ -26,6 +26,7 @@ import { Check, EyeIcon, EyeClosedIcon, X } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { PasskeyButton } from "../passkey-button";
 import { getErrorMessage } from "@/lib/errors";
+import { redirect } from "next/navigation";
 
 // esquema do zod:
 const loginInfos = z.object({
@@ -78,13 +79,15 @@ export function LoginForm() {
           setIsPending(false);
           setShowCheck(true);
           setTimeout(() => setShowCheck(false), 2000);
-          console.log(ctx.data);
+          toast.success(`Bem-vindo(a), ${ctx.data.user.name}!`)
+          redirect("/")
         },
         onError: (ctx) => {
           setIsPending(false);
           setShowErrorFlash(true);
           setTimeout(() => setShowErrorFlash(false), 2000);
           toast.error(getErrorMessage(ctx.error.code))
+          form.setValue("password", "")
         },
       }
     );
@@ -133,7 +136,7 @@ export function LoginForm() {
                 <div className="flex">
                   <Input
                     type={showPass ? "text" : "password"}
-                    placeholder="**********"
+                    placeholder="***"
                     autoComplete="current-password webauthn"
                     className="rounded-r-none"
                     {...field}
