@@ -11,14 +11,14 @@ export function AuthFooter({ auth_type }: AuthFooterProps) {
     <CardFooter className="w-full flex justify-center text-sm text-muted-foreground">
       {
         auth_type === "login" ? (
-          <Link href="/sign-up" className="group/linkCriacao">
+          <Link href="/conta/registrar" className="group/linkCriacao">
             Não tem uma conta? {" "}
               <span className="underline-offset-4 group-hover/linkCriacao:underline">
                 Crie uma
               </span>
           </Link>
         ) : (
-          <Link href="/sign-in" className="group/linkLogin">
+          <Link href="/conta/entrar" className="group/linkLogin">
             Já tem uma conta? {" "}
               <span className="underline-offset-4 group-hover/linkLogin:underline">
                 Entre
