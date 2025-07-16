@@ -6,8 +6,9 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { db } from "@/lib/db";
 
 // plugins:
-import { emailOTP } from "better-auth/plugins";
+import { emailOTP, twoFactor } from "better-auth/plugins";
 import { sendVerificationEmail } from "@/lib/actions/send-verification-email";
+import { passkey } from "better-auth/plugins/passkey";
 
 export const auth = betterAuth({
   // conexão do bando de dados:
@@ -19,6 +20,16 @@ export const auth = betterAuth({
     emailOTP({
       async sendVerificationOTP({ email, otp, type }) {},
     }),
+     passkey({
+      rpID: "zatjini",
+      rpName: "Zatjini",
+      authenticatorSelection: {
+        authenticatorAttachment: "cross-platform",
+        residentKey: "preferred",
+        userVerification: "preferred"
+      }
+     }),
+     twoFactor() 
   ],
 
   // tipos de autenticação possíveis:
