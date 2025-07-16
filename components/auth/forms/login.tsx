@@ -25,6 +25,7 @@ import { toast } from "sonner"
 import { Check, EyeIcon, EyeClosedIcon, X } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { PasskeyButton } from "../passkey-button";
+import { getErrorMessage } from "@/lib/errors";
 
 // esquema do zod:
 const loginInfos = z.object({
@@ -83,7 +84,7 @@ export function LoginForm() {
           setIsPending(false);
           setShowErrorFlash(true);
           setTimeout(() => setShowErrorFlash(false), 2000);
-          console.log(ctx.error);
+          toast.error(getErrorMessage(ctx.error.code))
         },
       }
     );
@@ -104,7 +105,7 @@ export function LoginForm() {
               <FormControl>
                 <Input
                   placeholder="você@alguma-coisa.com"
-                  autoComplete="email username"
+                  autoComplete="email username webauthn"
                   {...field}
                 />
               </FormControl>
@@ -122,7 +123,7 @@ export function LoginForm() {
                 Senha
                 <Button
                   variant="link"
-                  className="cursor-pointer text-muted-foreground hover:text-black dark:hover:text-white p-0 h-3.5"
+                  className="text-muted-foreground hover:text-black dark:hover:text-white p-0 h-3.5"
                   asChild
                 >
                   <Link href="/conta/esqueci-a-senha">Esqueceu sua senha?</Link>
@@ -133,7 +134,7 @@ export function LoginForm() {
                   <Input
                     type={showPass ? "text" : "password"}
                     placeholder="**********"
-                    autoComplete="password"
+                    autoComplete="current-password webauthn"
                     className="rounded-r-none"
                     {...field}
                   />
