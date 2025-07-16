@@ -39,7 +39,7 @@ export function OauthButton({ provider, className }: LoginButtonProps) {
   return (
     <Button
       variant="outline"
-      className={className ? `hover:cursor-pointer ${className}` : "hover:cursor-pointer"}
+      className={`${className}`}
       onClick={handleClick}
       disabled={loading}
     >
