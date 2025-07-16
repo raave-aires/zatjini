@@ -200,6 +200,10 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
+  passkeys      Passkey[]
+
+  twoFactorEnabled Boolean?
+  twofactors       TwoFactor[]
 
   @@unique([email])
   @@map("user")
@@ -248,4 +252,31 @@ model Verification {
   updatedAt  DateTime?
 
   @@map("verification")
+}
+
+model Passkey {
+  id           String    @id
+  name         String?
+  publicKey    String
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  credentialID String
+  counter      Int
+  deviceType   String
+  backedUp     Boolean
+  transports   String?
+  createdAt    DateTime?
+  aaguid       String?
+
+  @@map("passkey")
+}
+
+model TwoFactor {
+  id          String @id
+  secret      String
+  backupCodes String
+  userId      String
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("twoFactor")
 }
