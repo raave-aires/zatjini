@@ -1,6 +1,8 @@
 "use client";
 
+// dependências:
 import React, { useState } from "react";
+import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,25 +19,23 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Loader } from "@/components/pieces/loader";
+import { toast } from "sonner"
 
 // ícones:
-import { Check, EyeIcon, EyeClosedIcon, X, Link } from "lucide-react";
+import { Check, EyeIcon, EyeClosedIcon, X } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import { PasskeyButton } from "../passkey-button";
 
 // esquema do zod:
-const registerInfos = z.object({
-  name: z.string().min(1, { message: "Como devemos te chamar?" }),
-  lastname: z.string().min(1, { message: "Seu sobrenome é?" }),
+const loginInfos = z.object({
   email: z
     .string()
-    .min(5, { message: "Precisamos de um e-mail para entrar em contato" })
+    .min(1, { message: "Precisamos de um e-mail ou nome de usuário" })
     .email({ message: "O e-mail digitado não é válido" }),
-  password: z
-    .string()
-    .min(1, { message: "Sua senha precisa ter ao menos 10 caracteres" }),
+  password: z.string(),
 });
 
-export function RegisterForm() {
+export function LoginForm() {
   const [isPending, setIsPending] = useState(false);
   const [showCheck, setShowCheck] = useState(false);
   const [showErrorFlash, setShowErrorFlash] = useState(false);
@@ -47,11 +47,9 @@ export function RegisterForm() {
     ? "bg-red-500 hover:bg-red-600"
     : null;
 
-  const form = useForm<z.infer<typeof registerInfos>>({
-    resolver: zodResolver(registerInfos),
+  const form = useForm<z.infer<typeof loginInfos>>({
+    resolver: zodResolver(loginInfos),
     defaultValues: {
-      name: "",
-      lastname: "",
       email: "",
       password: "",
     },
@@ -61,33 +59,31 @@ export function RegisterForm() {
   const [showPass, setShowPass] = useState<boolean>(false);
   const disableShowPassButton = pass === "" || pass === undefined;
 
-  async function onSubmit(values: z.infer<typeof registerInfos>) {
+  async function onSubmit(values: z.infer<typeof loginInfos>) {
     setShowCheck(false);
     setShowErrorFlash(false);
     setIsPending(true);
 
-    const { data, error } = await authClient.signUp.email(
+    await authClient.signIn.email(
       {
         email: values.email,
         password: values.password,
-        name: values.name + " " + values.lastname,
-        callbackURL: "",
       },
       {
         onRequest: () => {
           setIsPending(true);
         },
-        onSuccess: () => {
+        onSuccess: (ctx) => {
           setIsPending(false);
           setShowCheck(true);
           setTimeout(() => setShowCheck(false), 2000);
-          console.log(data);
+          console.log(ctx.data);
         },
-        onError: () => {
+        onError: (ctx) => {
           setIsPending(false);
           setShowErrorFlash(true);
           setTimeout(() => setShowErrorFlash(false), 2000);
-          console.log(error);
+          console.log(ctx.error);
         },
       }
     );
@@ -164,13 +160,24 @@ export function RegisterForm() {
           )}
         />
 
-        <Button
-          type="submit"
-          className={`text-white ${buttonColorClass}`}
-          disabled={isPending}
-        >
-          {isPending ? <Loader /> : showCheck ? <Check size={16} /> : "Entrar"}
-        </Button>
+        <div className="flex flex-col gap-2">
+          <Button
+            type="submit"
+            className={`${buttonColorClass}`}
+            disabled={isPending}
+          >
+            {isPending ? (
+              <Loader />
+            ) : showCheck ? (
+              <Check size={18} />
+            ) : showErrorFlash ? (
+              <X size={18} />
+            ) : (
+              "Entrar"
+            )}
+          </Button>
+          <PasskeyButton />
+        </div>
       </form>
     </Form>
   );
