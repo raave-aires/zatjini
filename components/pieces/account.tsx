@@ -9,14 +9,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LifeBuoy, LogOut, MessageSquareText, Settings } from "lucide-react";
+import { LifeBuoy, LogIn, MessageSquareText, Settings, UserRoundPlus } from "lucide-react";
+import { LogOutDropdownButton } from "@/components/auth/logout-buttons";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import Link from "next/link";
 
-function LoggedIn() {
+interface LoggedInProps {
+  name: string;
+  email: string;
+}
+
+function LoggedIn({ name, email }: LoggedInProps ) {
   return (
     <DropdownMenuContent align="end">
       <DropdownMenuLabel>
-        <p className="">Raave Aires</p>
-        <p className="text-xs text-muted-foreground">dev@raave.me</p>
+        <p>{name}</p>
+        <p className="text-xs text-muted-foreground">{email}</p>
       </DropdownMenuLabel>
       <DropdownMenuSeparator />
 
@@ -32,36 +41,39 @@ function LoggedIn() {
         </DropdownMenuItem>
       </DropdownMenuGroup>
       <DropdownMenuSeparator />
-      <DropdownMenuItem variant="destructive">
-        <LogOut /> Sair
-      </DropdownMenuItem>
+
+      <LogOutDropdownButton />
     </DropdownMenuContent>
   );
-};
+}
 
-function Unlogged(){
-  return(
+function Unlogged() {
+  return (
     <DropdownMenuContent align="end">
       <DropdownMenuLabel>Conta</DropdownMenuLabel>
       <DropdownMenuSeparator />
 
       <DropdownMenuGroup>
-        <DropdownMenuItem>
-          <Settings /> Entre
+        <DropdownMenuItem asChild>
+          <Link href="/conta/entrar">
+            <LogIn /> Entre
+          </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <LifeBuoy /> Cadastre-se
+        <DropdownMenuItem asChild>
+          <Link href="/conta/criar">
+            <UserRoundPlus /> Cadastre-se
+          </Link>
         </DropdownMenuItem>
       </DropdownMenuGroup>
     </DropdownMenuContent>
   );
-};
-
-interface AccountProps {
-  session?: boolean;
 }
 
-export function Account({ session= true }: AccountProps ) {
+export async function Account() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -71,7 +83,12 @@ export function Account({ session= true }: AccountProps ) {
         </Avatar>
       </DropdownMenuTrigger>
 
-      { session ? <LoggedIn /> : <Unlogged /> }
+      { session ? (
+        <LoggedIn 
+          name={session.user.name}
+          email={session.user.email}
+        /> 
+      ) : <Unlogged />}
     </DropdownMenu>
   );
 }
