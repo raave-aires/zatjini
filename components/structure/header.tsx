@@ -12,7 +12,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ProgressBar } from "@/components/pieces/progress-bar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Zatjini } from "@/components/pieces/logo";
 
@@ -52,7 +51,6 @@ export function Header() {
           </div>
         </nav>
       </header>
-      <ProgressBar />
     </>
   );
 }
