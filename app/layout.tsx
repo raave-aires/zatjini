@@ -64,7 +64,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" suppressHydrationWarning>
+    <html lang="pt-BR" suppressHydrationWarning className="no-scrollbar">
       <body
         className={`
             ${averia.variable} ${geistSans.variable} ${geistMono.variable} 
