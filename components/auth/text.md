@@ -117,43 +117,7 @@
             </Card>
 
             {/* Security Section */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Shield className="h-5 w-5" />
-                  Security
-                </CardTitle>
-                <CardDescription>Manage your account security and authentication settings</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <Label className="text-base">Two-Factor Authentication</Label>
-                    <p className="text-sm text-gray-500">Add an extra layer of security to your account</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {preferences.twoFactorAuth && <Badge variant="secondary">Enabled</Badge>}
-                    <Switch
-                      checked={preferences.twoFactorAuth}
-                      onCheckedChange={(checked) => handlePreferenceChange("twoFactorAuth", checked)}
-                    />
-                  </div>
-                </div>
-
-                <Separator />
-
-                <div className="space-y-4">
-                  <Button variant="outline" className="w-full justify-start gap-2 bg-transparent">
-                    <Lock className="h-4 w-4" />
-                    Change Password
-                  </Button>
-                  <Button variant="outline" className="w-full justify-start gap-2 bg-transparent">
-                    <Mail className="h-4 w-4" />
-                    Update Recovery Email
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            
           </div>
 
           {/* Sidebar */}

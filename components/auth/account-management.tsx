@@ -1,5 +1,6 @@
 import { authClient } from "@/lib/auth-client";
 import { AccountBasicInfos } from "../account-manager/basic-infos";
+import { AccountSecuritySection } from "../account-manager/security-section";
 
 export function AccountSettings() {
 
@@ -15,6 +16,7 @@ export function AccountSettings() {
       <div className="grid gap-4 lg:grid-cols-3">
         {/* Profile Section */}
         <AccountBasicInfos />
+        <AccountSecuritySection />
       </div>
     </>
   );

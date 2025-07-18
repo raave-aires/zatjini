@@ -26,7 +26,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 
 // ícones:
-import { Camera, User } from "lucide-react";
+import { AtSign, Camera, User } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { useEffect } from "react";
 
@@ -36,30 +36,22 @@ const profileDataSchema = z.object({
   email: z.string().email(),
 });
 
-interface AccountBasicInfosProps {
-  user: {
-    name: string;
-    username: string;
-    email: string;
-  };
-}
-
 export function AccountBasicInfos() {
   const { data: session } = authClient.useSession();
-  const profileUpdateForm = useForm({ 
+  const profileUpdateForm = useForm({
     resolver: zodResolver(profileDataSchema),
     defaultValues: {
       name: "",
       username: "",
-      email: ""
-    }
+      email: "",
+    },
   });
 
   useEffect(() => {
     if (session?.user) {
       profileUpdateForm.reset({
         name: session.user.name,
-        username: `@${session.user.name}`, // ou name, se for esse seu caso
+        username: session.user.name, // ou name, se for esse seu caso
         email: session.user.email,
       });
     }
@@ -73,7 +65,7 @@ export function AccountBasicInfos() {
             <CardTitle className="flex items-center gap-2">
               <User className="size-5" /> Informações do perfil
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="mb-5">
               Atualize os detalhes e informações do seu perfil
             </CardDescription>
           </CardHeader>
@@ -125,9 +117,14 @@ export function AccountBasicInfos() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Nome de usuário</FormLabel>
-                    <FormControl>
-                      <Input {...field} className="space-y-2" />
-                    </FormControl>
+                    <div className="relative">
+                      <div className="text-muted-foreground pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 peer-disabled:opacity-50">
+                        <AtSign size={16} />
+                      </div>
+                      <FormControl>
+                        <Input className="peer ps-9" {...field} />
+                      </FormControl>
+                    </div>
                   </FormItem>
                 )}
               />
