@@ -24,7 +24,7 @@ export function AccountSecuritySection() {
           Segurança
         </CardTitle>
         <CardDescription>
-          Manage your account security and authentication settings
+          Gerencie as configurações de segurança da sua conta.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">

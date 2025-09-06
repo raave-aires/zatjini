@@ -6,6 +6,7 @@ import React, {
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 
 // componentes:
 import { Button } from "@/components/ui/button";
@@ -36,15 +37,15 @@ const registerInfos = z.object({
   name: z.string().min(1, { message: "Como devemos te chamar?" }),
   lastname: z.string().min(1, { message: "Seu sobrenome é?" }),
   email: z
-    .string()
-    .min(5, { message: "Precisamos de um e-mail para entrar em contato" })
-    .email({ message: "O e-mail digitado não é válido" }),
+    .email({ message: "O e-mail digitado não é válido" })
+    .min(5, { message: "Precisamos de um e-mail para entrar em contato" }),
   password: z
     .string()
     .min(1, { message: "Sua senha precisa ter ao menos 10 caracteres" }),
 });
 
 export function RegisterForm() {
+  const router = useRouter();
   const [isPending, setIsPending] = useState(false);
   const [showCheck, setShowCheck] = useState(false);
   const [showErrorFlash, setShowErrorFlash] = useState(false);
@@ -67,7 +68,7 @@ export function RegisterForm() {
   });
 
   const pass = form.watch("password");
-  const [showPass, setShowPass] = useState<boolean>(false);
+  const [ showPass, setShowPass ] = useState<boolean>(false);
   const disableShowPassButton = pass === "" || pass === undefined;
 
   async function onSubmit(values: z.infer<typeof registerInfos>) {
@@ -89,8 +90,13 @@ export function RegisterForm() {
         onSuccess: (ctx) => {
           setIsPending(false);
           setShowCheck(true);
-          setTimeout(() => setShowCheck(false), 2000);
-          toast.success(<p>Enviamos um e-mail de confirmação para <br/>{ctx.data.user.email}</p>)
+
+          sessionStorage.setItem('registerSuccess', 'true');
+          sessionStorage.setItem('registeredEmail', ctx.data.user.email);
+
+          setTimeout(() => {
+            router.push("/conta/criar/confirmar");
+          }, 1000);
         },
         onError: (ctx) => {
           setIsPending(false);

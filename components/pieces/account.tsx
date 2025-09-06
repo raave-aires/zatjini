@@ -30,8 +30,10 @@ function LoggedIn({ name, email }: LoggedInProps ) {
       <DropdownMenuSeparator />
 
       <DropdownMenuGroup>
-        <DropdownMenuItem>
-          <Settings /> Configurações
+        <DropdownMenuItem asChild>
+          <Link href="/conta/gerenciar">
+            <Settings /> Configurações
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
           <LifeBuoy /> Ajuda e suporte
