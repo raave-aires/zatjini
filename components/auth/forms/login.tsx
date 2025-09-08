@@ -31,9 +31,8 @@ import { getErrorMessage } from "@/lib/errors";
 // esquema do zod:
 const loginInfos = z.object({
   email: z
-    .string()
-    .min(1, { message: "Precisamos de um e-mail ou nome de usuário" })
-    .email({ message: "O e-mail digitado não é válido" }),
+    .email({ message: "O e-mail digitado não é válido" })
+    .min(1, { message: "Precisamos de um e-mail ou nome de usuário" }),
   password: z.string(),
 });
 
@@ -41,8 +40,6 @@ export function LoginForm() {
   const router = useRouter()
   
   const [isPending, setIsPending] = useState(false);
-  const [showCheck, setShowCheck] = useState(false);
-  const [showErrorFlash, setShowErrorFlash] = useState(false);
 
   // escolhe a classe de cor do botão
   const buttonColorClass = showCheck
@@ -64,8 +61,6 @@ export function LoginForm() {
   const disableShowPassButton = pass === "" || pass === undefined;
 
   async function onSubmit(values: z.infer<typeof loginInfos>) {
-    setShowCheck(false);
-    setShowErrorFlash(false);
     setIsPending(true);
 
     await authClient.signIn.email(
@@ -79,15 +74,11 @@ export function LoginForm() {
         },
         onSuccess: (ctx) => {
           setIsPending(false);
-          setShowCheck(true);
-          setTimeout(() => setShowCheck(false), 2000);
           toast.success(`Bem-vindo(a), ${ctx.data.user.name}!`)
           router.push("/");
         },
         onError: (ctx) => {
           setIsPending(false);
-          setShowErrorFlash(true);
-          setTimeout(() => setShowErrorFlash(false), 2000);
           toast.error(getErrorMessage(ctx.error.code))
           form.setValue("password", "")
         },
@@ -106,7 +97,7 @@ export function LoginForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>E-mail ou nome de usuário</FormLabel>
+              <FormLabel>E-mail</FormLabel>
               <FormControl>
                 <Input
                   placeholder="você@alguma-coisa.com"

@@ -1,17 +1,22 @@
-import { Clock3, Key, Lock, Mail, Shield } from "lucide-react";
+// dependências:
+import { authClient } from "@/lib/auth-client";
+
+// componentes
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../ui/card";
-import { Badge } from "../ui/badge";
-import { Label } from "../ui/label";
-import { Switch } from "../ui/switch";
-import { Separator } from "../ui/separator";
-import { Button } from "../ui/button";
-import { authClient } from "@/lib/auth-client";
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { TwoFactorActivation } from "@/components/account-manager/two-factor-activation";
+
+// ícones:
+import { Clock3, Key, Lock, Shield } from "lucide-react";
 
 export function AccountSecuritySection() {
   const { data: session } = authClient.useSession();
@@ -36,10 +41,13 @@ export function AccountSecuritySection() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            {session?.user.twoFactorEnabled && (
-              <Badge variant="secondary">Enabled</Badge>
+            {session?.user.twoFactorEnabled ? (
+              <Badge>Ativado</Badge>
+            ) : ( 
+              <>
+                <TwoFactorActivation isActive={ session?.user.twoFactorEnabled! }/>
+              </>
             )}
-            <Switch checked={session?.user.twoFactorEnabled!} />
           </div>
         </div>
 

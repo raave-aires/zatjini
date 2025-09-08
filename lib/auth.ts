@@ -6,20 +6,20 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { db } from "@/lib/db";
 
 // plugins:
-import { emailOTP, twoFactor } from "better-auth/plugins";
-import { sendVerificationEmail } from "@/lib/actions/send-verification-email";
+import { twoFactor } from "better-auth/plugins";
 import { passkey } from "better-auth/plugins/passkey";
+
+// e-mails:
+import { sendVerificationEmail } from "@/lib/actions/send-verification-email";
 
 export const auth = betterAuth({
   // conexão do bando de dados:
   database: prismaAdapter(db, {
     provider: "postgresql",
   }),
+  appName: "Zatjini",
   // plugins:
   plugins: [
-    emailOTP({
-      async sendVerificationOTP({ email, otp, type }) {},
-    }),
      passkey({
       rpID: "zatjini",
       rpName: "Zatjini",
@@ -47,6 +47,7 @@ export const auth = betterAuth({
       });
     },
     sendOnSignUp: true,
+    autoSignInAfterVerification: true,
   },
   socialProviders: {
     github: {
