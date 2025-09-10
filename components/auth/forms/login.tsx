@@ -41,13 +41,6 @@ export function LoginForm() {
   
   const [isPending, setIsPending] = useState(false);
 
-  // escolhe a classe de cor do botão
-  const buttonColorClass = showCheck
-    ? "bg-green-500"
-    : showErrorFlash
-    ? "bg-red-500 hover:bg-red-600"
-    : null;
-
   const form = useForm<z.infer<typeof loginInfos>>({
     resolver: zodResolver(loginInfos),
     defaultValues: {
@@ -160,15 +153,10 @@ export function LoginForm() {
         <div className="flex flex-col gap-2">
           <Button
             type="submit"
-            className={`${buttonColorClass}`}
             disabled={isPending}
           >
             {isPending ? (
               <Loader />
-            ) : showCheck ? (
-              <Check size={18} />
-            ) : showErrorFlash ? (
-              <X size={18} />
             ) : (
               "Entrar"
             )}
